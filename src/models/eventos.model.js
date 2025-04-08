@@ -20,11 +20,20 @@ export const createEvent = async ({ nombre, fecha, lugar_nombre, latitud, longit
 
 export const updateEvent = async (id, { nombre, fecha, lugar_nombre, latitud, longitud, numero_asistentes }) => {
     const [result] = await pool.execute(
-        'UPDATE eventos SET nombre = ?, fecha = ?, lugar_nombre = ?, latitud = ?, longitud = ?, numero_asistentes = ? WHERE id = ?',
+        `UPDATE eventos 
+         SET 
+           nombre = COALESCE(?, nombre),
+           fecha = COALESCE(?, fecha),
+           lugar_nombre = COALESCE(?, lugar_nombre),
+           latitud = COALESCE(?, latitud),
+           longitud = COALESCE(?, longitud),
+           numero_asistentes = COALESCE(?, numero_asistentes)
+         WHERE id = ?`,
         [nombre, fecha, lugar_nombre, latitud, longitud, numero_asistentes, id]
     );
     return result.affectedRows;
 };
+
 
 export const deleteEvent = async (id) => {
     const [result] = await pool.execute('DELETE FROM eventos WHERE id = ?', [id]);
