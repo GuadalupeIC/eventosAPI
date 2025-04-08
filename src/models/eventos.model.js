@@ -1,12 +1,12 @@
 import { pool } from "../db.js";
 
 export const getAllEvents = async () => {
-    const [rows] = await pool.execute('SELECT * FROM eventos ORDER BY fecha DESC');
+    const [rows] = await pool.execute('SELECT id, nombre, DATE_FORMAT(fecha, \'%d/%m/%Y\') as fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos ORDER BY fecha DESC');
     return rows;
 };
 
 export const getEventById = async (id) => {
-    const [rows] = await pool.execute('SELECT * FROM eventos WHERE id = ?', [id]);
+    const [rows] = await pool.execute('SELECT id, nombre, DATE_FORMAT(fecha, \'%d/%m/%Y\') as fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos WHERE id = ?', [id]);
     return rows[0];
 };
 
