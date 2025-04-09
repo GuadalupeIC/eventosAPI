@@ -1,12 +1,18 @@
 import { pool } from "../db.js";
 
+// ✅ Se elimina el formateo de fecha para mantener 'YYYY-MM-DD'
 export const getAllEvents = async () => {
-    const [rows] = await pool.execute('SELECT id, nombre, DATE_FORMAT(fecha, \'%d/%m/%Y\') as fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos ORDER BY fecha DESC');
+    const [rows] = await pool.execute(
+        'SELECT id, nombre, fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos ORDER BY fecha DESC'
+    );
     return rows;
 };
 
 export const getEventById = async (id) => {
-    const [rows] = await pool.execute('SELECT id, nombre, DATE_FORMAT(fecha, \'%d/%m/%Y\') as fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos WHERE id = ?', [id]);
+    const [rows] = await pool.execute(
+        'SELECT id, nombre, fecha, lugar_nombre, latitud, longitud, numero_asistentes FROM eventos WHERE id = ?',
+        [id]
+    );
     return rows[0];
 };
 
@@ -33,7 +39,6 @@ export const updateEvent = async (id, { nombre, fecha, lugar_nombre, latitud, lo
     );
     return result.affectedRows;
 };
-
 
 export const deleteEvent = async (id) => {
     const [result] = await pool.execute('DELETE FROM eventos WHERE id = ?', [id]);
